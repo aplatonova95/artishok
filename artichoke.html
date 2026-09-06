@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arti.Sh0ck — the painting</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .bloom-wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media (max-width:860px){ .bloom-wrap{ grid-template-columns:1fr; } }
+
+  .bloom-stage{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(55,37,22,0.18);
+    cursor:pointer;
+    background:var(--ink);
+  }
+  .bloom-quad{
+    position:absolute;
+    width:50%; height:50%;
+    overflow:hidden;
+  }
+  .bloom-quad img{
+    width:200%; height:200%;
+    max-width:none;
+    display:block;
+  }
+  #q-day{ top:0; left:0; }
+  #q-day img{ object-position:0% 0%; transform:translate(0,0); }
+  #q-bloom{ top:0; right:0; }
+  #q-bloom img{ object-position:100% 0%; transform:translate(-50%,0); }
+  #q-gold{ bottom:0; left:0; }
+  #q-gold img{ object-position:0% 100%; transform:translate(0,-50%); }
+  #q-night{ bottom:0; right:0; }
+  #q-night img{ object-position:100% 100%; transform:translate(-50%,-50%); }
+
+  .bloom-quad{ transition:transform 900ms cubic-bezier(.2,.8,.2,1), filter 900ms ease; }
+  .bloom-stage.blooming #q-day{ transform:translate(-6%,-6%) rotate(-1.5deg); }
+  .bloom-stage.blooming #q-bloom{ transform:translate(6%,-6%) rotate(1.5deg); }
+  .bloom-stage.blooming #q-gold{ transform:translate(-6%,6%) rotate(1.5deg); }
+  .bloom-stage.blooming #q-night{ transform:translate(6%,6%) rotate(-1.5deg); }
+
+  .bloom-hint{
+    position:absolute;
+    bottom:16px; left:50%;
+    transform:translateX(-50%);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--paper);
+    background:rgba(55,37,22,0.55);
+    padding:7px 14px;
+    border-radius:20px;
+    pointer-events:none;
+    transition:opacity 300ms;
+  }
+  .bloom-stage.blooming .bloom-hint{ opacity:0; }
+
+  .stage-labels{
+    display:flex;
+    gap:18px;
+    margin-top:20px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+  }
+  .stage-labels span{ opacity:0.4; transition:opacity 300ms, color 300ms; }
+  .bloom-stage.blooming ~ .stage-labels span{ opacity:1; }
+  .stage-labels .l-day{ color:var(--sun); }
+  .stage-labels .l-bloom{ color:var(--sage); }
+  .stage-labels .l-gold{ color:#c99a1e; }
+  .stage-labels .l-night{ color:var(--indigo); }
+
+  @media (prefers-reduced-motion: reduce){
+    .bloom-quad{ transition:none; }
+  }
+
+  /* falling petal */
+  .petal{
+    position:absolute;
+    top:38%; left:52%;
+    width:26px; height:34px;
+    background:radial-gradient(circle at 35% 30%, #f2a6c8, #c2447c 70%);
+    border-radius:70% 30% 60% 40% / 60% 50% 50% 40%;
+    opacity:0;
+    pointer-events:none;
+    transform:translate(-50%,-50%) rotate(0deg) scale(0.6);
+    z-index:5;
+  }
+  .petal.falling{
+    animation:petal-fall 1100ms cubic-bezier(.4,.2,.6,1) forwards;
+  }
+  @keyframes petal-fall{
+    0%{ opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(0.6); }
+    12%{ opacity:1; transform:translate(-50%,-50%) rotate(10deg) scale(1); }
+    100%{ opacity:0; transform:translate(-30%, 180%) rotate(220deg) scale(0.8); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="brand">
+    <svg class="brand-mark" viewBox="0 0 28 28"><circle cx="14" cy="14" r="13" fill="#6E8B52"/><path d="M14 6 C10 9 8 13 8 17 C8 21 10.5 23 14 23 C17.5 23 20 21 20 17 C20 13 18 9 14 6 Z" fill="#0F4E77"/></svg>
+    Arti.Sh0ck
+  </a>
+  <button class="nav-toggle" id="navToggle">MENU</button>
+  <div class="nav-links" id="navLinks">
+    <a href="collections.html" class="active">Collections</a>
+    <a href="commissions.html">Commissions</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<section class="wrap section">
+  <div class="bloom-wrap">
+    <div data-reveal="left">
+      <div class="bloom-stage" id="bloomStage">
+        <div class="bloom-quad" id="q-day"><img src="assets/img/artichoke_full.jpg" alt="Artichoke painting, day quadrant"></div>
+        <div class="bloom-quad" id="q-bloom"><img src="assets/img/artichoke_full.jpg" alt="Artichoke painting, blooming quadrant"></div>
+        <div class="bloom-quad" id="q-gold"><img src="assets/img/artichoke_full.jpg" alt="Artichoke painting, gold quadrant"></div>
+        <div class="bloom-quad" id="q-night"><img src="assets/img/artichoke_full.jpg" alt="Artichoke painting, night quadrant"></div>
+        <div class="bloom-hint">Click to bloom</div>
+        <div class="petal" id="petal"></div>
+      </div>
+      <div class="stage-labels">
+        <span class="l-day">Day</span>
+        <span class="l-bloom">Bloom</span>
+        <span class="l-gold">Gold</span>
+        <span class="l-night">Night</span>
+      </div>
+    </div>
+
+    <div data-reveal="right">
+      <p class="eyebrow">02 · The painting the brand is named after</p>
+      <h1 style="font-size:clamp(32px,4.5vw,48px);">One artichoke, <em class="accent">four</em> lights.</h1>
+      <p class="lede">Every quarter of this canvas is the same artichoke, painted in a different light — morning, flowering, golden hour, and midnight. Arti.Sh0ck takes its name directly from this piece.</p>
+      <p class="lede">Original, oil on canvas, 40×40cm.</p>
+      <div style="margin-top:24px; display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="contact.html" class="btn">Inquire about this piece</a>
+        <a href="collections.html" class="btn ghost">Back to collections</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band band-sage" id="nextUp">
+<div class="wrap center">
+  <p class="eyebrow" style="justify-content:center;">Next up</p>
+  <h2 style="font-size:clamp(26px,4vw,38px);">More paintings, more colors.</h2>
+  <p class="lede" style="margin:0 auto 24px;">If this one bloomed for you, the Vitamin C series is next — paint it yourself with your own cursor.</p>
+  <a href="index.html#citrus-hero" class="btn">See Vitamin C</a>
+</div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-col">
+    <div class="brand" style="font-size:16px;">Arti.Sh0ck</div>
+    <p style="font-size:13px; opacity:0.6; max-width:220px; margin-top:8px;">Original oil paintings, painted by hand, one canvas at a time.</p>
+  </div>
+  <div class="footer-col">
+    <div class="footer-title">Site</div>
+    <div class="footer-links">
+      <a href="collections.html">Collections</a>
+      <a href="commissions.html">Commissions</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-col">
+    <div class="footer-title">Follow</div>
+    <div class="footer-links">
+      <a href="#">TikTok</a>
+      <a href="#">Pinterest</a>
+      <a href="#">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script src="reveal.js"></script>
+<script>
+  var stage = document.getElementById('bloomStage');
+  var petal = document.getElementById('petal');
+  var nextUp = document.getElementById('nextUp');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  stage.addEventListener('click', function(){
+    var wasBlooming = stage.classList.contains('blooming');
+    stage.classList.toggle('blooming');
+
+    if(!wasBlooming){
+      // just bloomed: drop a petal, then drift down to the next section
+      if(!reduceMotion){
+        petal.classList.remove('falling');
+        void petal.offsetWidth; // restart animation
+        petal.classList.add('falling');
+        setTimeout(function(){
+          nextUp.scrollIntoView({ behavior:'smooth', block:'start' });
+        }, 950);
+      } else {
+        nextUp.scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+    }
+  });
+</script>
+</body>
+</html>
