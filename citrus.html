@@ -26,6 +26,9 @@
   }
   .piece-imgs.has-detail{ grid-template-columns:1.4fr 1fr; }
   @media (max-width:520px){ .piece-imgs.has-detail{ grid-template-columns:1fr; } }
+  .piece-imgs.trio{ grid-template-columns:1.3fr 1fr; grid-template-rows:1fr 1fr; }
+  .piece-imgs.trio img:first-child{ grid-row:1/3; }
+  @media (max-width:520px){ .piece-imgs.trio{ grid-template-columns:1fr 1fr; grid-template-rows:auto; } .piece-imgs.trio img:first-child{ grid-column:1/3; grid-row:auto; } }
   .piece img{
     border-radius:16px;
     box-shadow:var(--card-shadow);
@@ -38,6 +41,12 @@
     font-size:13px;
     opacity:0.4;
     margin-bottom:6px;
+  }
+  .price-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:20px;
+    color:var(--indigo);
+    margin:10px 0 2px;
   }
 </style>
 </head>
@@ -67,27 +76,34 @@
 <section class="wrap">
 
   <div class="piece" data-reveal="fade">
-    <div class="piece-imgs has-detail">
+    <div class="piece-imgs trio">
       <img src="assets/img/lemon.jpg" alt="Painting of lemons in a glass bowl">
-      <img src="assets/img/lemon_detail.jpg" alt="Detail of a lemon slice, brushwork close-up">
+      <img src="assets/img/lemon_coral.jpg" alt="Lemon painting, alternate angle on a terracotta wall">
+      <img src="assets/img/lemon_detail.jpg" alt="Detail of the lemons, brushwork close-up">
     </div>
     <div>
       <p class="piece-num">01</p>
       <h2 style="font-size:26px;">Lemon</h2>
       <p class="lede">A glass bowl overflowing with lemons, one wedge set aside on the table. Original, oil on canvas, 20×20cm.</p>
-      <a href="contact.html" class="btn" style="margin-top:12px;">Inquire about this piece</a>
+      <p class="price-tag">€90</p>
+      <a href="contact.html" class="btn" style="margin-top:8px;">Inquire about this piece</a>
     </div>
   </div>
 
   <div class="piece reverse" data-reveal="fade">
-    <div class="piece-imgs">
+    <div class="piece-imgs trio">
       <img src="assets/img/orange.jpg" alt="Painting of sliced oranges on a table">
+      <img src="assets/img/orange_detail.jpg" alt="Detail of orange slices, brushwork close-up">
+      <div style="border-radius:16px; box-shadow:var(--card-shadow); background:linear-gradient(135deg,#EE8434,#F0862C); display:flex; align-items:center; justify-content:center; padding:16px;">
+        <p class="mono" style="color:rgba(255,255,255,0.9); font-size:12px; text-align:center;">"Orange, You're Not"</p>
+      </div>
     </div>
     <div>
       <p class="piece-num">02</p>
       <h2 style="font-size:26px;">Orange</h2>
       <p class="lede">"Orange, You're Not" — a still life of whole and sliced oranges, painted in warm, loose brushstrokes. Original, oil on canvas, 20×20cm.</p>
-      <a href="contact.html" class="btn" style="margin-top:12px;">Inquire about this piece</a>
+      <p class="price-tag">€90</p>
+      <a href="contact.html" class="btn" style="margin-top:8px;">Inquire about this piece</a>
     </div>
   </div>
 
