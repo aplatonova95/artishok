@@ -83,6 +83,9 @@
     .bloom-quad{ transition:none; }
   }
 
+  .full-piece-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:700px){ .full-piece-grid{ grid-template-columns:1fr; } }
+
   /* falling petal */
   .petal{
     position:absolute;
@@ -155,13 +158,11 @@
 </section>
 
 <section class="wrap" style="padding-bottom:64px;">
-  <div style="display:grid; grid-template-columns:0.8fr 1fr; gap:40px; align-items:center;" data-reveal="fade">
-    <img src="assets/img/artichoke_full_canvas.jpg" alt="The full 80x80cm canvas on the easel, showing the bare margin left around the painted area" style="border-radius:16px; box-shadow:var(--card-shadow); width:100%;">
-    <div>
-      <p class="eyebrow">The full piece</p>
-      <p class="lede">The interactive version above is cropped in tight on the painted 60×60cm square, since that's what makes the bloom effect work. This is what the actual canvas looks like — 80×80cm, with the bare linen margin left visible on purpose around the edge.</p>
-    </div>
+  <div class="full-piece-grid" data-reveal="fade">
+    <img src="assets/img/artichoke_full_canvas.jpg" alt="The full 80x80cm canvas, showing the bare margin left around the painted area" style="border-radius:16px; box-shadow:var(--card-shadow); width:100%;">
+    <img src="assets/img/artichoke_lifestyle.jpg" alt="The framed artichoke painting hanging in a living room" style="border-radius:16px; box-shadow:var(--card-shadow); width:100%; object-fit:cover; height:100%;">
   </div>
+  <p class="lede" style="margin-top:20px;" data-reveal="fade">The interactive version above is cropped in tight on the painted 60×60cm square, since that's what makes the bloom effect work. This is what the actual canvas looks like — 80×80cm, with the bare linen margin left visible on purpose around the edge.</p>
 </section>
 
 <section class="band band-sage" id="nextUp">
